@@ -8,6 +8,7 @@ jobs:
     name: "PHPUnit tests"
 
     runs-on: ${{ matrix.operating-system }}
+    continue-on-error: ${{ matrix.experimental }}
 
     strategy:
       matrix:
@@ -16,8 +17,22 @@ jobs:
           - "highest"
         php-version:
           - "7.4"
+          - "8.0"
+          - "8.1"
+          - "8.2"
         operating-system:
           - "ubuntu-latest"
+        experimental: [ false ]
+        include:
+          - php: "8.0"
+            composer-options: "--ignore-platform-reqs"
+            experimental: true
+          - php: "8.1"
+            composer-options: "--ignore-platform-reqs"
+            experimental: true
+          - php: "8.2"
+            composer-options: "--ignore-platform-reqs"
+            experimental: true
 
     steps:
       - name: "Checkout"
@@ -40,17 +55,11 @@ jobs:
           key: "php-${{ matrix.php-version }}-${{ matrix.dependencies }}"
           restore-keys: "php-${{ matrix.php-version }}-${{ matrix.dependencies }}"
 
-      - name: "Install lowest dependencies"
-        if: ${{ matrix.dependencies == 'lowest' }}
-        run: "composer update --prefer-lowest --no-interaction --no-progress --no-suggest"
-
-      - name: "Install highest dependencies"
-        if: ${{ matrix.dependencies == 'highest' }}
-        run: "composer update --no-interaction --no-progress --no-suggest"
-
-      - name: "Install locked dependencies"
-        if: ${{ matrix.dependencies == 'locked' }}
-        run: "composer install --no-interaction --no-progress --no-suggest"
+      - name: "Install dependencies (Composer)"
+        uses: "ramsey/composer-install@v1"
+        with:
+          dependency-versions: "${{ matrix.dependencies }}"
+          composer-options: "${{ matrix.composer-options }}"
 
       - name: "Tests"
         run: "vendor/bin/phpunit"
