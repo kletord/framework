@@ -26,12 +26,18 @@ jobs:
         include:
           - php: "8.0"
             composer-options: "--ignore-platform-reqs"
+            operating-system: "ubuntu-latest"
+            dependencies: "hightest"
             experimental: true
           - php: "8.1"
             composer-options: "--ignore-platform-reqs"
+            operating-system: "ubuntu-latest"
+            dependencies: "hightest"
             experimental: true
           - php: "8.2"
             composer-options: "--ignore-platform-reqs"
+            operating-system: "ubuntu-latest"
+            dependencies: "hightest"
             experimental: true
 
     steps:
