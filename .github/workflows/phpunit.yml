@@ -7,7 +7,7 @@ jobs:
   phpunit:
     name: "PHPUnit tests"
 
-    runs-on: ${{ matrix.operating-system }}
+    runs-on: "ubuntu-latest"
     continue-on-error: ${{ matrix.experimental }}
 
     strategy:
@@ -17,27 +17,18 @@ jobs:
           - "highest"
         php-version:
           - "7.4"
-          - "8.0"
-          - "8.1"
-          - "8.2"
-        composer-options: [""]
-        operating-system:
-          - "ubuntu-latest"
         experimental: [ false ]
         include:
           - php: "8.0"
             composer-options: "--ignore-platform-reqs"
-            operating-system: "ubuntu-latest"
             dependencies: "hightest"
             experimental: true
           - php: "8.1"
             composer-options: "--ignore-platform-reqs"
-            operating-system: "ubuntu-latest"
             dependencies: "hightest"
             experimental: true
           - php: "8.2"
             composer-options: "--ignore-platform-reqs"
-            operating-system: "ubuntu-latest"
             dependencies: "hightest"
             experimental: true
 
